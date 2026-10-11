@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1565c0">
+<meta name="description" content="LINKON: free overtime (OT) calculator and pay slip app. Track Day, Night and Friday OT, bonuses and your final salary. Works offline.">
+<link rel="canonical" href="https://linko81.github.io/newwwwww123/">
+<meta property="og:title" content="LINKON — Overtime Calculator">
+<meta property="og:description" content="Track overtime hours, bonuses and your final pay. Works offline. Free.">
+<meta property="og:image" content="https://linko81.github.io/newwwwww123/banner.jpg">
+<meta property="og:url" content="https://linko81.github.io/newwwwww123/">
+<meta property="og:type" content="website">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>LINKON — Overtime Calculator</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="splash"><img class="splash-logo" src="banner.jpg" alt="Pakiza Software"><h1>LINKON</h1><p>Overtime Calculator</p><div class="by">Built by<b id="builder"></b></div></div>
+
+<div class="top"><header class="app-bar"><img id="avatarTop" class="avatar" src="profile.jpg" alt="Profile"><div class="ttl"><b>LINKON</b><span>Overtime Calculator</span></div><input type="month" id="monthPicker" aria-label="Month"></header>
+<nav class="tabs">
+<button data-go="home" class="on">Home</button><button data-go="records">Records</button><button data-go="team">Team</button><button data-go="employee">Profile</button><button data-go="settings">Settings</button></nav></div>
+
+<main>
+<section data-tab="home">
+ <div class="banner"><img src="banner.jpg" alt="Pakiza Software"><button id="langBtn" class="langpill">বাংলা</button></div>
+ <div class="card total"><div class="big"><span id="totalHours">0</span> HOURS</div><div id="totalLabel"></div></div>
+ <div class="card"><h2>Daily hours</h2><div id="dayGrid"></div></div>
+ <div class="card"><h2>Monthly summary</h2><div id="summaryTable"></div></div>
+ <div class="card"><h2>Pay calculator</h2>
+  <label>Basic salary (monthly)<input type="number" id="payBasic" min="0" step="0.01" inputmode="decimal"></label>
+  <label>OT rate per hour<input type="number" id="payRate" min="0" step="0.01" inputmode="decimal"></label>
+  <label>Night bill per night shift<input type="number" id="payNight" min="0" step="0.01" inputmode="decimal"></label>
+  <label>Attendance bonus (this month)<input type="number" id="bonusAtt" min="0" step="0.01" inputmode="decimal"></label>
+  <label>Attitude bonus (this month)<input type="number" id="bonusAtd" min="0" step="0.01" inputmode="decimal"></label>
+  <label>Currency name<input id="payCur" maxlength="6"></label>
+  <div id="payResult"></div>
+  <button class="primary" id="slipBtn">VIEW PAY SLIP</button></div>
+ <div class="card"><h2 id="formTitle">Add OT record</h2>
+  <label>Date<input type="date" id="recDate"></label>
+  <label>Shift<select id="recShift"></select></label>
+  <label>OT hours<input type="number" id="recHours" step="0.25" min="0" inputmode="decimal"></label>
+  <div class="row"><button class="primary" id="addBtn">ADD OT RECORD</button><button id="cancelEdit" hidden>Cancel</button></div>
+ </div>
+</section>
+
+<section data-tab="records" hidden>
+ <div class="card"><h2>OT records</h2><div id="recordList"></div>
+ <button class="danger" id="clearMonth">Clear this month</button></div>
+</section>
+
+<section data-tab="team" hidden>
+ <div class="card"><h2>Team view (read-only)</h2>
+  <p class="empty">Workers send you their backup file (Profile → Export data). Add the files here to see their records for the selected month. You can only view them: nothing here can be edited, and your own records never change. The files stay on this phone.</p>
+  <button class="primary" id="teamAdd">Add worker backup files</button><button class="danger" id="teamClear">Remove all</button>
+  <input type="file" id="teamFile" accept=".json,application/json" multiple hidden></div>
+ <div class="card"><h2>Online supervisor</h2>
+  <p id="supMsg" class="empty">Sign in under Profile to use online supervisor access.</p>
+  <div id="supBox" hidden>
+   <p>Your supervisor ID:</p><div class="codebox" id="supUid"></div>
+   <button id="supIdShare">Share ID</button><button id="supCheck">Check status</button>
+   <div id="supPay" hidden></div>
+   <div id="supActive" hidden>
+    <label>Worker share code<input id="supCode" maxlength="12" autocapitalize="characters"></label>
+    <button class="primary" id="supAdd">Add worker</button><button id="supRefresh">Refresh</button>
+    <p class="empty">You can only view workers who gave you their code. Their records cannot be edited here.</p>
+   </div>
+  </div>
+  <div id="onlineList"></div></div>
+ <div id="teamList"></div>
+</section>
+
+<section data-tab="employee" hidden>
+ <div class="card"><h2>Employee</h2>
+  <div class="avrow"><img id="avatarBig" class="avatar big" src="profile.jpg" alt="Profile"><div><button id="avatarBtn">Change picture</button><button id="avatarReset">Default</button><input type="file" id="avatarFile" accept="image/*" hidden></div></div>
+  <label>Employee name<input id="empName" autocomplete="off"></label>
+  <label>Employee ID<input id="empId" autocomplete="off"></label>
+  <button class="primary" id="saveEmp">Save employee</button></div>
+ <div class="card"><h2>Backup</h2>
+  <button id="exportBtn">Export data (JSON)</button>
+  <button id="importBtn">Import data</button><input type="file" id="importFile" accept=".json,application/json" hidden></div>
+ <div class="card"><h2>Online account (optional)</h2>
+  <p class="empty">Back up your records online, and share them with a supervisor only if you choose. Needs internet. The app works fully without an account.</p>
+  <div id="acctOut">
+   <label>Email<input type="email" id="acctEmailIn" autocomplete="email"></label>
+   <label>Password (6+ characters)<input type="password" id="acctPass" autocomplete="current-password"></label>
+   <button class="primary" id="acctSignIn">Sign in</button><button id="acctSignUp">Create account</button><button id="acctReset">Forgot password</button>
+  </div>
+  <div id="acctIn" hidden>
+   <p>Signed in as <b id="acctEmail"></b></p>
+   <p class="empty" id="syncInfo">Not synced yet.</p>
+   <button class="primary" id="acctSync">Sync now</button><button id="acctOutBtn">Sign out</button>
+   <h3>Share with a supervisor</h3>
+   <p class="empty">A supervisor with this code can view your records and pay (read-only). Give it only to someone you trust.</p>
+   <div id="myCodeRow" hidden><div class="codebox" id="myCode"></div><button id="codeShare">Share code</button><button class="danger" id="codeStop">Stop sharing</button></div>
+   <button id="codeGet">Get my share code</button>
+  </div>
+ </div>
+ <div class="card"><h2>Invite friends</h2><p class="empty">Share the app link with friends, family and office colleagues.</p><button class="primary" id="inviteBtn">Share app link</button><button id="installBtn" hidden>Install app</button></div>
+</section>
+
+<section data-tab="settings" hidden>
+ <div class="card"><h2>OT rules (hours)</h2>
+  <label>Day<input type="number" id="setDay" step="0.25" min="0.25"></label>
+  <label>Night<input type="number" id="setNight" step="0.25" min="0.25"></label>
+  <label>Friday option 1<input type="number" id="setFri1" step="0.25" min="0.25"></label>
+  <label>Friday option 2<input type="number" id="setFri2" step="0.25" min="0.25"></label>
+  <label>Theme<select id="setTheme"><option value="light">Blue &amp; White</option><option value="dark">Navy Blue</option></select></label>
+  <label>Language<select id="setLang"><option value="en">English</option><option value="bn">বাংলা</option></select></label>
+  <button class="primary" id="saveSettings">Save settings</button>
+  <button id="resetSettings">Restore defaults</button></div>
+ <div class="card"><h2>Privacy</h2><p>Your employee details and OT records are stored on this device. Nothing is sent online unless you create an online account. No analytics are used. Export a backup regularly: clearing browser data removes your records.</p></div>
+</section>
+</main>
+
+
+<div id="slip" hidden><div class="slip-bar"><button id="slipClose">Close</button><button id="slipPrint" class="primary">Save PDF / Print</button><button id="slipShare">Share</button></div><div id="slipPaper"></div></div>
+<div id="toast" role="status"></div>
+<script src="i18n.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
